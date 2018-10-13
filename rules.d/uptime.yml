@@ -1,0 +1,24 @@
+groups:
+- name: uptime
+  rules:
+  - alert: NodeRebooted
+    expr: changes(node_boot_time[1h]) > 0
+    labels:
+      severity: info
+    annotations:
+      summary: Node rebooted
+  - alert: NodeDown
+    expr: up{job="node"} == 0
+    for: 5m
+    labels:
+      severity: info
+    annotations:
+      summary: Node down
+  - alert: NodeUptimeTooHigh
+    # uptime higher than 60d
+    expr: time() - node_boot_time > 5184000
+    for: 1m
+    labels:
+      severity: info
+    annotations:
+      summary: Node uptime too high; go and reboot it

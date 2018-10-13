@@ -1,0 +1,38 @@
+groups:
+- name: smart
+  rules:
+  - alert: DiskTooHot
+    expr: smartmon_airflow_temperature_cel_raw_value > 40
+    for: 30m
+    labels:
+      severity: info
+    annotations:
+      summary: Disk is too hot, fix airflow
+  - alert: SMARTOfflineUncorrectableSectors
+    expr: smartmon_offline_uncorrectable_raw_value > 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: Disk has uncorrectable sectors
+  - alert: SMARTReallocatedSectors
+    expr: smartmon_reallocated_sector_ct_raw_value > 0
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: Disk has reallocated sectors
+  - alert: SMARTCurrentPendingSector
+    expr: smartmon_current_pending_sector_raw_value > 0
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: Disk has pending sectors
+  - alert: SMARTMonitorNotRunning
+    expr: time() - node_textfile_mtime{file="smartmon.prom"} > 3600
+    for: 1h
+    labels:
+      severity: info
+    annotations:
+      summary: Periodic SMART monitoring not running (timer/service disabled?)
