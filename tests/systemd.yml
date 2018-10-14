@@ -1,0 +1,21 @@
+rule_files:
+- rules.d/systemd.yml
+
+evaluation_interval: 1m
+
+tests:
+- interval: 1m
+  input_series:
+  - series: 'node_systemd_unit_state{instance="host1",name="systemd-binfmt.service",state="failed"}'
+    values: 0+1x31
+  alert_rule_test:
+  - eval_time: 30m
+    alertname: NodeHasFailedServices
+  - eval_time: 31m
+    alertname: NodeHasFailedServices
+    exp_alerts:
+    - exp_labels:
+        severity: info
+        instance: host1
+      exp_annotations:
+        summary: Node has failed systemd units
