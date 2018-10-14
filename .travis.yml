@@ -13,3 +13,4 @@ install:
 
 script:
 - promtool check rules rules.d/*.yml
+- promtool test rules tests/*.yml

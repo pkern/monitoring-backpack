@@ -1,0 +1,31 @@
+rule_files:
+- rules.d/system.yml
+
+evaluation_interval: 1m
+
+tests:
+- interval: 1m
+  input_series:
+  - series: 'node_filesystem_avail_bytes{instance="host1",mountpoint="/"}'
+    # 720 minutes (= 12 hours), 1 byte per minute, 5 minutes ahead of time
+    values: 725-1x720
+  promql_expr_test:
+  - expr: predict_linear(node_filesystem_avail_bytes[5m], 12*60*60)
+    # Needs 5m of data
+    eval_time: 5m
+    exp_samples:
+    - labels: '{instance="host1",mountpoint="/"}'
+      value: 0
+  alert_rule_test:
+  - eval_time: 35m
+    alertname: FilesystemFullSoon
+  # Alert fires after 30m of true, which requires 5m of data horizon.
+  - eval_time: 36m
+    alertname: FilesystemFullSoon
+    exp_alerts:
+    - exp_labels:
+        severity: info
+        instance: host1
+        mountpoint: /
+      exp_annotations:
+        summary: At the current rate, the disk will fill up competely in 12 hours
