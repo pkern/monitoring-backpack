@@ -30,7 +30,7 @@ groups:
     annotations:
       summary: Disk has pending sectors
   - alert: SMARTMonitorNotRunning
-    expr: time() - node_textfile_mtime{file="smartmon.prom"} > 3600
+    expr: time() - node_textfile_mtime_seconds{file="smartmon.prom"} > 3600
     for: 1h
     labels:
       severity: info

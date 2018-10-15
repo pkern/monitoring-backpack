@@ -16,7 +16,7 @@ groups:
     annotations:
       summary: Node has pending updates
   - alert: APTMonitorNotRunning
-    expr: time() - node_textfile_mtime{file="aptmon.prom"} > 3600
+    expr: time() - node_textfile_mtime_seconds{file="apt.prom"} > 3600
     for: 1h
     labels:
       severity: info
