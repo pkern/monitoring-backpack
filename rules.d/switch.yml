@@ -1,0 +1,24 @@
+groups:
+- name: switch
+  rules:
+  - alert: UplinkNotGigabit
+    expr: ((ifSpeed) * on(ifIndex) group_left(ifAlias) (ifAlias{ifAlias="Uplink"})) != 1000000000
+    for: 1m
+    labels:
+      severity: info
+    annotations:
+      summary: Uplink is not running at 1GE speed
+  - alert: SwitchHighInputErrors
+    expr: rate(ifInErrors[5m]) > 0
+    for: 5m
+    labels:
+      severity: info
+    annotations:
+      summary: 'Port {{$labels.ifIndex}} has a high error rate: {{$value}}'
+  - alert: SwitchHighOutputErrors
+    expr: rate(ifOutErrors[5m]) > 0
+    for: 5m
+    labels:
+      severity: info
+    annotations:
+      summary: 'Port {{$labels.ifIndex}} has a high error rate: {{$value}}'
