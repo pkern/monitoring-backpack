@@ -1,0 +1,10 @@
+groups:
+- name: printer
+  rules:
+  - alert: PrinterSupplyEmptySoon
+    expr: 'sum(((prtMarkerSuppliesLevel / prtMarkerSuppliesMaxCapacity{prtMarkerSuppliesIndex=~"[1-4]"}) * on(prtMarkerSuppliesIndex) group_left(prtMarkerSuppliesDescription) prtMarkerSuppliesDescription)) by(instance,job,prtMarkerSuppliesDescription) * 100 < 25'
+    for: 1m
+    labels:
+      severity: info
+    annotations:
+      summary: "{{$labels.prtMarkerSuppliesDescription}} is empty soon: {{$value}}%"
