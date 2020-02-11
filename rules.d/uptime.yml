@@ -2,8 +2,9 @@ groups:
 - name: uptime
   rules:
   - alert: NodeRebooted
-    expr: changes(node_boot_time[1h]) > 0
+    expr: changes(node_boot_time_seconds[1h]) > 0
     labels:
+      # info will suppress this at night, which is fine.
       severity: info
     annotations:
       summary: Node rebooted
@@ -11,12 +12,12 @@ groups:
     expr: up{job="node"} == 0
     for: 5m
     labels:
-      severity: info
+      severity: warning
     annotations:
       summary: Node down
   - alert: NodeUptimeTooHigh
     # uptime higher than 60d
-    expr: time() - node_boot_time > 5184000
+    expr: time() - node_boot_time_seconds > 5184000
     for: 1m
     labels:
       severity: info
