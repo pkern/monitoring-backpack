@@ -1,6 +1,13 @@
 groups:
 - name: switch
   rules:
+  - alert: SwitchDataUnavailable
+    expr: 'up{job="switch"} < 1'
+    for: 10m
+    labels:
+      severity: info
+    annotations:
+      summary: "Switch monitoring unavailable: likely SNMP exporter is down/unreachable"
   - alert: UplinkNotGigabit
     expr: ((ifSpeed) * on(ifIndex) group_left(ifAlias) (ifAlias{ifAlias="Uplink"})) != 1000000000
     for: 1m
