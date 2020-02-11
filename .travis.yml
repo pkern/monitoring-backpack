@@ -1,11 +1,13 @@
 language: go
 
 go:
-- 1.10.x
+- 1.13
 
 install:
 - PROMTOOL_URI=github.com/prometheus/prometheus/cmd/promtool;
+  PROMTOOL_VERSION=v2.15.1;
   go get -d $PROMTOOL_URI;
+  git -C $GOPATH/src/$PROMTOOL_URI checkout -b $PROMTOOL_VERSION tags/$PROMTOOL_VERSION;
   go install $PROMTOOL_URI
 
 script:
