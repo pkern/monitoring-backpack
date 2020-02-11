@@ -1,12 +1,10 @@
 groups:
 - name: systemd
   rules:
-  - record: instance:node_systemd_unit_state_failed:sum
-    expr: sum(node_systemd_unit_state{state="failed"}) by (instance)
-  - alert: NodeHasFailedServices
-    expr: instance:node_systemd_unit_state_failed:sum > 0
-    for: 30m
+  - alert: NodeHasFailedService
+    expr: node_systemd_unit_state{state="failed"} > 0
+    for: 15m
     labels:
       severity: info
     annotations:
-      summary: Node has failed systemd units
+      summary: "systemd unit {{ $labels.name }} failed"
