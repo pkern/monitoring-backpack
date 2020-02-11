@@ -3,14 +3,16 @@ groups:
   rules:
   - alert: NodeHasRebootPending
     expr: node_reboot_required > 0
-    for: 1d
+    # 3d lets unattended-upgrades do its work where applicable
+    for: 3d
     labels:
       severity: info
     annotations:
       summary: Node needs rebooting
   - alert: NodeHasUpdatesPending
     expr: sum(apt_upgrades_pending) by (instance) > 0
-    for: 30m
+    # 1d lets unattended-upgrades do its work where applicable
+    for: 1d
     labels:
       severity: info
     annotations:
