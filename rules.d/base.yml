@@ -1,0 +1,26 @@
+groups:
+- name: base
+  rules:
+  # https://medium.com/@tom.fawcett/time-of-day-based-notifications-with-prometheus-and-alertmanager-1bf7a23b7695
+  - record: is_european_summer_time
+    expr: |
+      (vector(1) and (month() > 3 and month() < 10))
+      or
+      (vector(1) and (month() == 3 and (day_of_month() - day_of_week()) >= 25) and absent((day_of_month() >= 25) and (day_of_week() == 0)))
+      or
+      (vector(1) and (month() == 10 and (day_of_month() - day_of_week()) < 25) and absent((day_of_month() >= 25) and (day_of_week() == 0)))
+      or
+      (vector(1) and ((month() == 10 and hour() < 1) or (month() == 3 and hour() > 0)) and ((day_of_month() >= 25) and (day_of_week() == 0)))
+      or
+      vector(0)
+  - record: europe_berlin_time
+    expr: time() + 3600 + 3600 * is_european_summer_time
+  - record: europe_berlin_hour
+    expr: hour(europe_berlin_time)
+  - alert: QuietHours
+    expr: europe_berlin_hour >= 0 and europe_berlin_hour <= 8
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: 'This alert fires during quiet hours. It should be blackholed by Alertmanager.'
