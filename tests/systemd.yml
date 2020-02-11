@@ -7,15 +7,17 @@ tests:
 - interval: 1m
   input_series:
   - series: 'node_systemd_unit_state{instance="host1",name="systemd-binfmt.service",state="failed"}'
-    values: 0+1x31
+    values: 0+1x16
   alert_rule_test:
-  - eval_time: 30m
-    alertname: NodeHasFailedServices
-  - eval_time: 31m
-    alertname: NodeHasFailedServices
+  - eval_time: 15m
+    alertname: NodeHasFailedService
+  - eval_time: 16m
+    alertname: NodeHasFailedService
     exp_alerts:
     - exp_labels:
         severity: info
         instance: host1
+        name: systemd-binfmt.service
+        state: failed
       exp_annotations:
-        summary: Node has failed systemd units
+        summary: systemd unit systemd-binfmt.service failed
