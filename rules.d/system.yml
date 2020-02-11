@@ -11,10 +11,10 @@ groups:
     annotations:
       summary: At the current rate, the disk will fill up competely in 12 hours
   - alert: FilesystemReadOnly
-    expr: node_filesystem_readonly > 0
+    expr: node_filesystem_readonly{device!="borgfs"} > 0
     for: 1m
     labels:
-      severity: info
+      severity: warning
     annotations:
       summary: Filesystem is read-only; check if a failure happened (or silence the alert)
   - alert: EDACCorrectableErrors
@@ -31,3 +31,10 @@ groups:
       severity: critical
     annotations:
       summary: EDAC uncorrectable errors detected
+  - alert: LoadPersistentlyTooHigh
+    expr: node_load15 > 1
+    for: 2h
+    labels:
+      severity: info
+    annotations:
+      summary: 15m load average is higher than a single core
