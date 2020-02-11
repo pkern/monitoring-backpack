@@ -2,10 +2,12 @@ groups:
 - name: smart
   rules:
   - alert: DiskTooHot
-    expr: smartmon_airflow_temperature_cel_raw_value > 40
+    expr: |
+      smartmon_airflow_temperature_cel_raw_value > 39
+      or smartmon_temperature_celsius_raw_value > 39
     for: 30m
     labels:
-      severity: info
+      severity: warning
     annotations:
       summary: Disk is too hot, fix airflow
   - alert: SMARTOfflineUncorrectableSectors
