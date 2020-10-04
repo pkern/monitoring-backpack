@@ -11,7 +11,7 @@ groups:
     annotations:
       summary: At the current rate, the disk will fill up competely in 12 hours
   - alert: FilesystemReadOnly
-    expr: node_filesystem_readonly{device!="borgfs"} > 0
+    expr: node_filesystem_readonly{device!="borgfs",mountpoint!="/nix/store"} > 0
     for: 1m
     labels:
       severity: warning
