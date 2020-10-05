@@ -1,0 +1,35 @@
+name: Test Prometheus rules
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * 0' # weekly
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - run: go version
+      - name: Install promtool
+        run: |
+          GOPATH=/home/runner/go;
+          PATH=$GOPATH/bin:$PATH;
+          PROMTOOL_URI=github.com/prometheus/prometheus/cmd/promtool;
+          PROMTOOL_VERSION=v2.15.1;
+          go get -v -d $PROMTOOL_URI;
+          git -C $GOPATH/src/$PROMTOOL_URI checkout -b $PROMTOOL_VERSION tags/$PROMTOOL_VERSION;
+          go install $PROMTOOL_URI
+      - name: Check rules
+        run: |
+          GOPATH=/home/runner/go;
+          PATH=$GOPATH/bin:$PATH;
+          promtool check rules rules.d/*.yml
+      - name: Test rules
+        run: |
+          GOPATH=/home/runner/go;
+          PATH=$GOPATH/bin:$PATH;
+          promtool test rules tests/*.yml
