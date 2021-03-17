@@ -1,0 +1,22 @@
+rule_files:
+- ../rules.d/base.yml
+
+evaluation_interval: 1m
+
+tests:
+- interval: 1m
+  input_series:
+  - series: 'up{instance="host1",job="node"}'
+    values: 1+0x15
+  alert_rule_test:
+  - eval_time: 14m
+    alertname: TargetNotUp
+  - eval_time: 15m
+    alertname: TargetNotUp
+    exp_alerts:
+    - exp_labels:
+        severity: warning
+        instance: host1
+        job: node
+      exp_annotations:
+        summary: Configured target is not reachable by Prometheus

@@ -24,3 +24,10 @@ groups:
       severity: critical
     annotations:
       description: 'This alert fires during quiet hours. It should be blackholed by Alertmanager.'
+  - alert: TargetNotUp
+    expr: up
+    for: 15m
+    labels:
+      severity: warning
+    annotations:
+      summary: Configured target is not reachable by Prometheus
