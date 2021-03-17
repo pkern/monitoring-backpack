@@ -7,11 +7,11 @@ tests:
 - interval: 1m
   input_series:
   - series: 'up{instance="host1",job="node"}'
-    values: 1+0x15
+    values: 1 0+0x15
   alert_rule_test:
-  - eval_time: 14m
-    alertname: TargetNotUp
   - eval_time: 15m
+    alertname: TargetNotUp
+  - eval_time: 16m
     alertname: TargetNotUp
     exp_alerts:
     - exp_labels:
