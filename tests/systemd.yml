@@ -21,3 +21,20 @@ tests:
         state: failed
       exp_annotations:
         summary: systemd unit systemd-binfmt.service failed
+- interval: 1m
+  input_series:
+  - series: 'node_systemd_unit_state{instance="host1",name="systemd-binfmt.service",state="activating"}'
+    values: 0+1x16
+  alert_rule_test:
+  - eval_time: 15m
+    alertname: NodeHasServiceStuckInActivating
+  - eval_time: 16m
+    alertname: NodeHasServiceStuckInActivating
+    exp_alerts:
+    - exp_labels:
+        severity: info
+        instance: host1
+        name: systemd-binfmt.service
+        state: activating
+      exp_annotations:
+        summary: systemd unit systemd-binfmt.service is stuck in activating state

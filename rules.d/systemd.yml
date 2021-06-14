@@ -8,3 +8,10 @@ groups:
       severity: info
     annotations:
       summary: "systemd unit {{ $labels.name }} failed"
+  - alert: NodeHasServiceStuckInActivating
+    expr: node_systemd_unit_state{state="activating"} > 0
+    for: 15m
+    labels:
+      severity: info
+    annotations:
+      summary: "systemd unit {{ $labels.name }} is stuck in activating state"
