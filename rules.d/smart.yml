@@ -3,8 +3,8 @@ groups:
   rules:
   - alert: DiskTooHot
     expr: |
-      smartmon_airflow_temperature_cel_raw_value > 39
-      or smartmon_temperature_celsius_raw_value > 39
+      smartmon_airflow_temperature_cel_raw_value > 40
+      or smartmon_temperature_celsius_raw_value > 40
     for: 30m
     labels:
       severity: warning
