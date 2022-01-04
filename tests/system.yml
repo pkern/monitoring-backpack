@@ -29,3 +29,20 @@ tests:
         mountpoint: /
       exp_annotations:
         summary: At the current rate, the disk will fill up competely in 12 hours
+- interval: 1m
+  input_series:
+  - series: 'node_filesystem_avail_bytes{instance="host1",mountpoint="/"}'
+    # 32MiB 1KiB 0
+    values: 33554432 1024 0
+  alert_rule_test:
+  - eval_time: 1m
+    alertname: FilesystemFull
+  - eval_time: 2m
+    alertname: FilesystemFull
+    exp_alerts:
+    - exp_labels:
+        severity: critical
+        instance: host1
+        mountpoint: /
+      exp_annotations:
+        summary: Filesystem has less than 16MiB free

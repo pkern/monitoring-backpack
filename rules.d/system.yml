@@ -10,6 +10,13 @@ groups:
       severity: info
     annotations:
       summary: At the current rate, the disk will fill up competely in 12 hours
+  - alert: FilesystemFull
+    expr: node_filesystem_avail_bytes{fstype!="ramfs"} < 16*1024*1024
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: Filesystem has less than 16MiB free
   - alert: FilesystemReadOnly
     expr: node_filesystem_readonly{device!="borgfs",mountpoint!="/nix/store"} > 0
     for: 1m
