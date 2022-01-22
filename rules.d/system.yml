@@ -18,7 +18,7 @@ groups:
     annotations:
       summary: Filesystem has less than 16MiB free
   - alert: FilesystemReadOnly
-    expr: node_filesystem_readonly{device!="borgfs",mountpoint!="/nix/store"} > 0
+    expr: node_filesystem_readonly{device!="borgfs",mountpoint!~"^(/nix/store|.+@.+)"} > 0
     for: 1m
     labels:
       severity: warning

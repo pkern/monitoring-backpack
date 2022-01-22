@@ -46,3 +46,21 @@ tests:
         mountpoint: /
       exp_annotations:
         summary: Filesystem has less than 16MiB free
+- interval: 1m
+  input_series:
+  - series: 'node_filesystem_readonly{instance="host1",mountpoint="/"}'
+    values: 0 1 1
+  # ZFS snapshots contain an @ in the mountpoint and should not fire read-only
+  # alerts
+  - series: 'node_filesystem_readonly{instance="host1",mountpoint="rpool/volume@snapshot"}'
+    values: 0 1 1
+  alert_rule_test:
+  - eval_time: 2m
+    alertname: FilesystemReadOnly
+    exp_alerts:
+    - exp_labels:
+        severity: warning
+        instance: host1
+        mountpoint: /
+      exp_annotations:
+        summary: Filesystem is read-only; check if a failure happened (or silence the alert)
