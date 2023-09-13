@@ -1,0 +1,47 @@
+groups:
+- name: docsis
+  # https://www.vodafonekabelforum.de/viewtopic.php?f=57&t=39941#p619248
+  rules:
+  - alert: DOCSISDownstreamPowerLevelTooLow
+    # In dBmV
+    expr: |
+         docsis_channel_power_level{modulation="256QAM",direction="downstream"} < -6
+      or docsis_channel_power_level{modulation="64QAM",direction="downstream"} < -12
+      or docsis_channel_power_level{modulation="1024QAM",direction="downstream"} < -4
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: DOCSIS downstream power level too low (remediation needed)
+  - alert: DOCSISDownstreamPowerLevelExtremelyLow
+    # In dBmV
+    expr: |
+         docsis_channel_power_level{modulation="256QAM",direction="downstream"} < -8
+      or docsis_channel_power_level{modulation="64QAM",direction="downstream"} < -14
+      or docsis_channel_power_level{modulation="1024QAM",direction="downstream"} < -6
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: DOCSIS downstream power level extremely low (immediate remediation needed)
+  - alert: DOCSISDownstreamPowerLevelTooHigh
+    # In dBmV
+    expr: |
+         docsis_channel_power_level{modulation="256QAM",direction="downstream"} > 18.1
+      or docsis_channel_power_level{modulation="64QAM",direction="downstream"} > 12.1
+      or docsis_channel_power_level{modulation="1024QAM",direction="downstream"} > 20.1
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: DOCSIS downstream power level too high (remediation needed)
+  - alert: DOCSISDownstreamPowerLevelExtremelyHigh
+    # In dBmV
+    expr: docsis_channel_power_level{modulation="256QAM",direction="downstream"} > 20
+      or docsis_channel_power_level{modulation="64QAM",direction="downstream"} > 14
+      or docsis_channel_power_level{modulation="1024QAM",direction="downstream"} > 22
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: DOCSIS downstream power level extremely high (immediate remediation needed)
