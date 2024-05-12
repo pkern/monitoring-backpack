@@ -2,12 +2,12 @@ groups:
 - name: printer
   rules:
   - alert: PrinterDataUnavailable
-    expr: 'up{job="printer"} < 1'
+    expr: 'up{job="printer"} < 1 and probe_success{instance=~"printer.*"} > 0'
     for: 10m
     labels:
       severity: info
     annotations:
-      summary: "Printer monitoring unavailable: likely SNMP exporter is down/unreachable"
+      summary: "Printer monitoring unavailable: likely SNMP exporter is down/unreachable (printer does ping)"
   - alert: PrinterSupplyEmptySoon
     expr: 'sum(((prtMarkerSuppliesLevel / prtMarkerSuppliesMaxCapacity{prtMarkerSuppliesIndex=~"[1-4]"}) * on(prtMarkerSuppliesIndex) group_left(prtMarkerSuppliesDescription) prtMarkerSuppliesDescription)) by(instance,job,prtMarkerSuppliesDescription) * 100 < 25'
     for: 1m
