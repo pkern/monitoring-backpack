@@ -25,7 +25,7 @@ groups:
     annotations:
       description: 'This alert fires during quiet hours. It should be blackholed by Alertmanager.'
   - alert: TargetNotUp
-    expr: up == 0
+    expr: up{job!="printer"} == 0
     for: 15m
     labels:
       severity: warning
