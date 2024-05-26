@@ -8,8 +8,8 @@
       src = pkgs.fetchFromGitHub {
         owner = "pkern";
         repo = "monitoring-backpack";
-        rev = "f4d96ce533e6b072d2cddd98313600aab4df1120";
-        sha256 = "0p33685a7hv1qk868sm8ghjxgqchc6aqdx791mdasy4fh9cbjfdi";
+        rev = "9cafab6b76924d3e6a394a7f80763361e033bf1b";
+        sha256 = "sha256-AerYqtCXqFNhD42BSi4FjVotfoKmUMKKIwy9TMX66cQ=";
       };
       buildInputs = [ pkgs.prometheus ];
       doCheck = true;
