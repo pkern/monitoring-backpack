@@ -8,8 +8,8 @@
       src = pkgs.fetchFromGitHub {
         owner = "pkern";
         repo = "monitoring-backpack";
-        rev = "9cafab6b76924d3e6a394a7f80763361e033bf1b";
-        sha256 = "sha256-AerYqtCXqFNhD42BSi4FjVotfoKmUMKKIwy9TMX66cQ=";
+        rev = "7699a1ca61a4756043fc8851d4487a3ec92acff7";
+        sha256 = "sha256-GMw1ixosr1rRF5WzFVvNfpYr4T0gdMw0k41vBkJYgnk=";
       };
       buildInputs = [ pkgs.prometheus ];
       doCheck = true;
@@ -23,7 +23,7 @@
       '';
     };
 
-    defaultPackage.x86_64-linux = self.packages.x86_64-linux.monitoring-backpack;
+    packages.x86_64-linux.default = self.packages.x86_64-linux.monitoring-backpack;
 
   };
 }
