@@ -39,7 +39,7 @@ groups:
     annotations:
       summary: EDAC uncorrectable errors detected
   - alert: LoadPersistentlyTooHigh
-    expr: node_load15 > 1
+    expr: sum(node_load15) by (instance) > (clamp_min(sum(node_cpu_online) by (instance) / 2, 1) or max(up{job="node"}) by (instance))
     for: 2h
     labels:
       severity: info
