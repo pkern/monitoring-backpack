@@ -11,7 +11,7 @@ groups:
     annotations:
       summary: At the current rate, the disk will fill up competely in 12 hours
   - alert: FilesystemFull
-    expr: node_filesystem_avail_bytes{fstype!~"^(ramfs|lxcfs)$"} < 16*1024*1024
+    expr: node_filesystem_avail_bytes{fstype!~"^(ramfs|fuse\.lxcfs)$"} < 16*1024*1024
     for: 1m
     labels:
       severity: critical
